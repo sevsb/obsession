@@ -11,7 +11,7 @@ defined('APP_NAME') or define('APP_NAME', "app");
 defined('ROOT_PATH') or define('ROOT_PATH', dirname(__FILE__) . "/..");
 defined('FRAMEWORK_PATH') or define('FRAMEWORK_PATH', ROOT_PATH . "/framework/");
 defined('APP_PATH') or define('APP_PATH', ROOT_PATH . "/" . APP_NAME . "/");
-defined('CONTROLLER_PATH') or define('CONTROLLER_PATH', ROOT_PATH . "/controller");
+defined('CONTROLLER_PATH') or define('CONTROLLER_PATH', ROOT_PATH . "/" . APP_NAME . "/controller");
 
 // url
 defined('DOMAIN_URL') or define('DOMAIN_URL', "http://114.215.82.75/");
