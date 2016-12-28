@@ -19,6 +19,7 @@ defined('ROOT_URL') or define('ROOT_URL', "");
 defined('INSTANCE_URL') or define('INSTANCE_URL', "/comacc/");
 defined('HOME_URL') or define('HOME_URL', DOMAIN_URL . INSTANCE_URL);
 defined('APP_URL') or define('APP_URL', DOMAIN_URL . INSTANCE_URL . APP_NAME . "/");
+defined('VENDOR_URL') or define('VENDOR_URL', ROOT_URL . INSTANCE_URL . "/vendor/");
 
 // log
 defined('LOG_DIR') or define('LOG_DIR', ROOT_PATH . '/logs/');
