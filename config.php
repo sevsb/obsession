@@ -16,7 +16,8 @@ defined('CONTROLLER_PATH') or define('CONTROLLER_PATH', ROOT_PATH . "/" . APP_NA
 // url
 defined('DOMAIN_URL') or define('DOMAIN_URL', "http://114.215.82.75/");
 defined('ROOT_URL') or define('ROOT_URL', "");
-defined('INSTANCE_URL') or define('INSTANCE_URL', "/instance/");
+// defined('INSTANCE_URL') or define('INSTANCE_URL', "/instance/");
+defined('INSTANCE_URL') or define('INSTANCE_URL', "/" . basename(dirname(dirname(__FILE__))) . "/");
 defined('HOME_URL') or define('HOME_URL', DOMAIN_URL . INSTANCE_URL);
 defined('APP_URL') or define('APP_URL', ROOT_URL . INSTANCE_URL . APP_NAME . "/");
 defined('VENDOR_URL') or define('VENDOR_URL', ROOT_URL . INSTANCE_URL . "/vendor/");
