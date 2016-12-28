@@ -17,7 +17,7 @@ class tpl {
     }
 
     public function assign($key, $value = '') {
-        if ($key == "instance" || $key == ":instance") {
+        if ($key == "instance" || $key == ":instance" || $key == ":app" || $key == "app" || $key == "vendor" || $key == ":vendor") {
             logging::fatal("TPL", "do not use variable: $key");
         }
 
@@ -63,7 +63,7 @@ class tpl {
     }
 
     public function display($tplname, $mem = false) {
-        $file = $this->parse($tplname);
+        list($file, $fileurl) = $this->parse($tplname);
         if (empty($file))
             return;
 
@@ -96,57 +96,83 @@ class tpl {
         ob_start();
         ob_implicit_flush(false);
 
-        // include($file);
+        if (PARSE_SCRIPT) {
+            extract($this->var, EXTR_OVERWRITE);
+            echo '<script>';
+            list($js, $jsurl) = $this->parse($tplname, "js");
+            if ($js != null) {
+                // logging::d("Tpl", "attach js: $js");
+                // $c = "<script type=\"text/javascript\" src=\"$js\"></script>\n" . $c;
+                include($js);
+            }
+            list($js, $jsurl) = $this->parse($tplname, "jscommon");
+            if ($js != null) {
+                // logging::d("Tpl", "attach js: $js");
+                // $c = "<script type=\"text/javascript\" src=\"$js1\"></script>\n" . $c;
+                include($js);
+
+            }
+            echo '</script>';
+            echo '<style>';
+            list($css, $cssurl) = $this->parse($tplname, "css");
+            if ($css != null) {
+                // logging::d("Tpl", "attach css: $css");
+                // $c = "<link rel='stylesheet' href='$css'>\n" . $c;
+                include($css);
+            }
+
+            list($css, $cssurl) = $this->parse($tplname, "csscommon");
+            if ($css != null) {
+                // logging::d("Tpl", "attach css: $css");
+                // $c = "<link rel='stylesheet' href='$css'>\n" . $c;
+                include($css);
+            }
+            echo '</style>';
+        } else {
+            list($js, $jsurl) = $this->parse($tplname, "js");
+            if ($jsurl != null) {
+                echo "<script type=\"text/javascript\" src=\"$jsurl\"></script>\n";
+            }
+            list($js, $jsurl) = $this->parse($tplname, "jscommon");
+            if ($jsurl != null) {
+                echo "<script type=\"text/javascript\" src=\"$jsurl\"></script>\n";
+            }
+            list($css, $cssurl) = $this->parse($tplname, "css");
+            if ($cssurl != null) {
+                echo "<link rel='stylesheet' href='$cssurl'>\n";
+            }
+            list($css, $cssurl) = $this->parse($tplname, "csscommon");
+            if ($cssurl != null) {
+                echo "<link rel='stylesheet' href='$cssurl'>\n";
+            }
+        }
+        $script = ob_get_clean();
+
+        ob_start();
+        ob_implicit_flush(false);
         $this->render($file);
-
-        extract($this->var, EXTR_OVERWRITE);
-        echo '<script>';
-        $js = $this->parse($tplname, "js");
-        if ($js != null) {
-            // logging::d("Tpl", "attach js: $js");
-            // $c = "<script type=\"text/javascript\" src=\"$js\"></script>\n" . $c;
-            include($js);
-        }
-        $js = $this->parse($tplname, "jscommon");
-        if ($js != null) {
-            // logging::d("Tpl", "attach js: $js");
-            // $c = "<script type=\"text/javascript\" src=\"$js1\"></script>\n" . $c;
-            include($js);
-
-        }
-        echo '</script>';
-        echo '<style>';
-        $css = $this->parse($tplname, "css");
-        if ($css != null) {
-            // logging::d("Tpl", "attach css: $css");
-            // $c = "<link rel='stylesheet' href='$css'>\n" . $c;
-            include($css);
-        }
-
-        $css = $this->parse($tplname, "csscommon");
-        if ($css != null) {
-            // logging::d("Tpl", "attach css: $css");
-            // $c = "<link rel='stylesheet' href='$css'>\n" . $c;
-            include($css);
-        }
-        echo '</style>';
         $c = ob_get_clean();
 
         // logging::d("Debug", "header: $header");
         // logging::d("Debug", "c: $c");
         // logging::d("Debug", "footer: $footer");
 
+        $script = $this->replace($script);
         $header = $this->replace($header);
         $c = $this->replace($c);
         $footer = $this->replace($footer);
 
+        $c = $header . $c . $footer;
+        $c = str_replace("</head>", "$script\n</head>", $c);
+
         if ($mem) {
-            return $header . $c . $footer;
+            return $c;
         }
 
-        echo $header;
+        // echo $script;
+        // echo $header;
         echo $c;
-        echo $footer;
+        // echo $footer;
 
         if (DEBUG) {
             // debug output.
@@ -179,7 +205,7 @@ class tpl {
             $file = ROOT_PATH . TPL_PATH . $tplname . "." . $ext;
             $ff = $file;
         } else {
-            return null;
+            return array(null, null);
         }
 
 
@@ -190,9 +216,9 @@ class tpl {
             //     logging::d("Tpl", "redirect $tplname to index.$ext");
             //     return $index;
             // }
-            return null;
+            return array(null, null);
         }
-        return $file;
+        return array(0 => $file, 1 => $ff);
     }
 
     private function replace($content) {
@@ -212,6 +238,8 @@ class tpl {
         }
 
         $content = str_replace("[:instance]", rtrim(INSTANCE_URL, "/"), $content);
+        $content = str_replace("[:app]", rtrim(APP_URL, "/"), $content);
+        $content = str_replace("[:vendor]", rtrim(VENDOR_URL, "/"), $content);
         return $content;
     }
 };

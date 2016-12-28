@@ -16,9 +16,9 @@ defined('CONTROLLER_PATH') or define('CONTROLLER_PATH', ROOT_PATH . "/" . APP_NA
 // url
 defined('DOMAIN_URL') or define('DOMAIN_URL', "http://114.215.82.75/");
 defined('ROOT_URL') or define('ROOT_URL', "");
-defined('INSTANCE_URL') or define('INSTANCE_URL', "/comacc/");
+defined('INSTANCE_URL') or define('INSTANCE_URL', "/instance/");
 defined('HOME_URL') or define('HOME_URL', DOMAIN_URL . INSTANCE_URL);
-defined('APP_URL') or define('APP_URL', DOMAIN_URL . INSTANCE_URL . APP_NAME . "/");
+defined('APP_URL') or define('APP_URL', ROOT_URL . INSTANCE_URL . APP_NAME . "/");
 defined('VENDOR_URL') or define('VENDOR_URL', ROOT_URL . INSTANCE_URL . "/vendor/");
 
 // log
@@ -31,6 +31,8 @@ defined('TPL_CSS_PATH') or define('TPL_CSS_PATH', "/" . APP_NAME . "/css/");
 
 // for debug
 defined('DEBUG') or define('DEBUG', true);
+
+defined('PARSE_SCRIPT') or define('PARSE_SCRIPT', false);
 
 if (!isset($_SESSION)) {
     session_start();
