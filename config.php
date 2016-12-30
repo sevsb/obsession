@@ -32,8 +32,8 @@ defined('TPL_CSS_PATH') or define('TPL_CSS_PATH', "/" . APP_NAME . "/css/");
 
 // for debug
 defined('DEBUG') or define('DEBUG', true);
-// parse_script
-defined('PARSE_SCRIPT') or define('PARSE_SCRIPT', true);
+
+defined('PARSE_SCRIPT') or define('PARSE_SCRIPT', false);
 
 if (!isset($_SESSION)) {
     session_start();
