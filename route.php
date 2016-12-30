@@ -7,7 +7,7 @@ function route() {
         session_start();
     }
 
-    if (false && isset($_SESSION["route.domain"]) && isset($_SESSION["route.subdomain"]) && isset($_SESSION["route.content"])) {
+    if (isset($_SESSION["route.domain"]) && isset($_SESSION["route.subdomain"]) && isset($_SESSION["route.content"])) {
         $domain = $_SESSION["route.domain"];
         $subdomain = $_SESSION["route.subdomain"];
         $contents = $_SESSION["route.content"];
