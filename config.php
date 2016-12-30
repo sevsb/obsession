@@ -9,7 +9,8 @@ defined('APP_NAME') or define('APP_NAME', "app");
 
 // path
 defined('ROOT_PATH') or define('ROOT_PATH', dirname(__FILE__) . "/..");
-defined('FRAMEWORK_PATH') or define('FRAMEWORK_PATH', ROOT_PATH . "/framework/");
+// defined('FRAMEWORK_PATH') or define('FRAMEWORK_PATH', ROOT_PATH . "/framework/");
+defined('FRAMEWORK_PATH') or define('FRAMEWORK_PATH', dirname(__FILE__) . "/");
 defined('APP_PATH') or define('APP_PATH', ROOT_PATH . "/" . APP_NAME . "/");
 defined('CONTROLLER_PATH') or define('CONTROLLER_PATH', ROOT_PATH . "/" . APP_NAME . "/controller");
 
@@ -23,7 +24,7 @@ defined('APP_URL') or define('APP_URL', ROOT_URL . INSTANCE_URL . APP_NAME . "/"
 defined('VENDOR_URL') or define('VENDOR_URL', ROOT_URL . INSTANCE_URL . "/vendor/");
 
 // log
-defined('LOG_DIR') or define('LOG_DIR', ROOT_PATH . '/logs/');
+// defined('LOG_DIR') or define('LOG_DIR', ROOT_PATH . '/logs/');
 
 // template
 defined('TPL_PATH') or define('TPL_PATH', "/" . APP_NAME . "/tpl/");

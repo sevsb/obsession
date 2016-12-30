@@ -1,0 +1,106 @@
+<?php
+
+include_once(dirname(__FILE__) . "/logging.php");
+
+function route() {
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+
+    if (false && isset($_SESSION["route.domain"]) && isset($_SESSION["route.subdomain"]) && isset($_SESSION["route.content"])) {
+        $domain = $_SESSION["route.domain"];
+        $subdomain = $_SESSION["route.subdomain"];
+        $contents = $_SESSION["route.content"];
+        $contents = str_replace("<?php", "", $contents);
+        eval($contents);
+        logging::d("route", "route from session: $subdomain.$domain");
+        return;
+    }
+
+    include_once(dirname(__FILE__) . "/domain.php");
+    $d = new domain();
+    $domain = $d->domain();
+    $subdomain = $d->subdomain();
+    $_SESSION["route.domain"] = $domain;
+    $_SESSION["route.subdomain"] = $subdomain;
+
+    $routepath = dirname(__FILE__) . "/../route/";
+
+    if (!is_dir($routepath)) {
+        return;
+    }
+
+    $file = $routepath . "$subdomain.$domain.php";
+    if (file_exists($file)) {
+        logging::d("route", "route to $subdomain.$domain");
+        include($file);
+        $_SESSION["route.content"] = file_get_contents($file);
+        return;
+    }
+    $file = $routepath . "$domain.php";
+    if (file_exists($file)) {
+        logging::d("route", "route to $domain");
+        include($file);
+        $_SESSION["route.content"] = file_get_contents($file);
+        return;
+    }
+
+    logging::d("route", "route nothing: $domain");
+}
+
+function parse_query_string() {
+    $qs = $_SERVER["QUERY_STRING"];
+    if (empty($qs)) {
+        $qs = "index/index";
+    }
+
+    $qsr = explode("&", $qs);
+    $qs = $qsr[0];
+
+    $qs = trim($qs, " /");
+
+    $qr = explode("/", $qs);
+
+    $length = count($qr);
+    if ($length < 3) {
+        if (count($qr) == 1) {
+            $qr[1] = "index";
+        }
+
+        $controller = $qr[0] . "_controller";
+        $action = $qr[1] . "_action";
+        $path = "";
+    } else {
+        $controller = $qr[$length - 2] . "_controller";
+        $action = $qr[$length - 1] . "_action";
+        unset($qr[$length - 1]);
+        unset($qr[$length - 2]);
+        $path = implode("/", $qr);
+    }
+
+    return array(0 => $path, 1 => $controller, 2 => $action);
+}
+
+function parse_action_string() {
+    $s = isset($_REQUEST["action"]) ? $_REQUEST["action"] : null;
+    if ($s === null) {
+        die("no action.");
+    }
+
+    $arr = explode(".", $s);
+    $length = count($arr);
+
+    if ($length < 2) {
+        die("invalid action.");
+    }
+
+    $className = $arr[$length - 2] . "_controller";
+    $funcName = $arr[$length - 1] . "_ajax";
+    unset($arr[$length - 1]);
+    unset($arr[$length - 2]);
+    $path = implode("/", $arr);
+
+    return array(0 => $path, 1 => $className, 2 => $funcName);
+}
+
+

@@ -1,34 +1,30 @@
 <?php
-include_once(dirname(__FILE__) . "/config.php");
-include_once(dirname(__FILE__) . "/helper.php");
-include_once(dirname(__FILE__) . "/logging.php");
+
+include_once(dirname(__FILE__) . "/route.php");
+
 
 function start() {
     // dump_var($_SERVER);
 
-    $qs = $_SERVER["QUERY_STRING"];
-    if (empty($qs)) {
-        $qs = "index/index";
+    route();
+
+    include_once(dirname(__FILE__) . "/config.php");
+    include_once(dirname(__FILE__) . "/logging.php");
+    include_once(dirname(__FILE__) . "/helper.php");
+
+
+    list($path, $controller, $action) = parse_query_string();
+
+    $pth = CONTROLLER_PATH . "/" . $path . "/$controller.php";
+
+    logging::d("Portal", "access: " . APP_NAME . ":$path::$controller::$action");
+
+    if (!file_exists($pth)) {
+        include_once(dirname(__FILE__) . "/notfound.php");
+        return;
     }
 
-    $qsr = explode("&", $qs);
-    $qs = $qsr[0];
-
-    $qs = trim($qs, " /");
-
-    $qr = explode("/", $qs);
-    if (count($qr) == 1) {
-        $qr[1] = "index";
-    }
-
-    $controller = $qr[0] . "_controller";
-    $action = $qr[1] . "_action";
-
-    logging::d("Debug", "access: $controller::$action");
-
-    $pth = CONTROLLER_PATH . "/$controller.php";
     include_once($pth);
-
 
     try {
         $class = new ReflectionClass($controller);

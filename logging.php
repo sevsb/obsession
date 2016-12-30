@@ -1,6 +1,7 @@
 <?php
+// include_once(dirname(__FILE__) . "/config.php");
 
-include_once(dirname(__FILE__) . "/config.php");
+defined('LOG_DIR') or define('LOG_DIR', dirname(__FILE__) . '/../logs/');
 
 class logging {
     private static $instance = null;
@@ -30,10 +31,6 @@ class logging {
     }
 
     private function write($level, $tag, $message, $strip = true) {
-        if (!DEBUG && $tag == "Debug") {
-            return false;
-        }
-
         if (PHP_SAPI != "cli") {
             if (!$this->fp) {
                 return false;

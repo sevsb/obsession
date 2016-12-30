@@ -1,31 +1,26 @@
 <?php
-include_once(dirname(__FILE__) . "/config.php");
-include_once(dirname(__FILE__) . "/logging.php");
-include_once(FRAMEWORK_PATH . "helper.php");
+include_once(dirname(__FILE__) . "/route.php");
 
 function dispatch_action() {
-    spl_autoload_register(function($class) {
-        $cf = CONTROLLER_PATH . "/$class.php";
-        if (is_file($cf)) {
-            include($cf);
-        }
-    });
+
+    route();
+
+    include_once(dirname(__FILE__) . "/config.php");
+    include_once(dirname(__FILE__) . "/logging.php");
+    include_once(dirname(__FILE__) . "/helper.php");
 
 
-    $s = get_request("action");
-    if ($s == null) {
+    list($path, $className, $funcName) = parse_action_string();
+
+    $pth = CONTROLLER_PATH . "/" . $path . "/$className.php";
+    logging::d("Action", "access: " . APP_NAME . ":$path::$className::$funcName");
+
+    if (!file_exists($pth)) {
+        include_once(dirname(__FILE__) . "/notfound.php");
         return;
     }
 
-    $arr = explode(".", $s);
-    if (count($arr) != 2) {
-        die("invalid action.");
-    }
-
-    $className = $arr[0] . "_controller";
-    $funcName = $arr[1] . "_ajax";
-
-    logging::d("Debug", "access: $className::$funcName");
+    include_once($pth);
 
     try {
         $class = new ReflectionClass($className);
