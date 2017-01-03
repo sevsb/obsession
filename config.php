@@ -32,7 +32,7 @@ defined('TPL_JS_PATH') or define('TPL_JS_PATH', "/" . APP_NAME . "/js/");
 defined('TPL_CSS_PATH') or define('TPL_CSS_PATH', "/" . APP_NAME . "/css/");
 
 // for debug
-defined('DEBUG') or define('DEBUG', true);
+defined('DEBUG') or define('DEBUG', false);
 
 defined('PARSE_SCRIPT') or define('PARSE_SCRIPT', false);
 

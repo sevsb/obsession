@@ -13,8 +13,11 @@ function route() {
         $contents = $_SESSION["route.content"];
         $contents = str_replace("<?php", "", $contents);
         eval($contents);
-        logging::d("route", "route from session: $subdomain.$domain");
-        return;
+        if (!isset(DEBUG) || !DEBUG) {
+            logging::d("route", "route from session: $subdomain.$domain");
+            return;
+        }
+        logging::d("route", "check domain instead of session because DEBUG is true.");
     }
 
     include_once(dirname(__FILE__) . "/domain.php");
