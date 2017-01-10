@@ -164,7 +164,7 @@ class database {
         $query = "SELECT * FROM $table $where $addons";
         return $this->get_all($query);
     }
-    
+
     public function show_all_tables() {
         $query = "show tables";
         return $this->get_all($query);
