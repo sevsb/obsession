@@ -190,9 +190,12 @@ function config_show_errors($show) {
 }
 
 config_show_errors(true);
-set_error_handler('logging_error_handler');
-set_exception_handler('logging_exception_handler');
-register_shutdown_function("logging_shutdown");
+
+if (!defined("DEBUG") || !DEBUG) {
+    set_error_handler('logging_error_handler');
+    set_exception_handler('logging_exception_handler');
+    register_shutdown_function("logging_shutdown");
+}
 
 
 // -- logging::d("TEST", "saaaaadsfasfdsadf");

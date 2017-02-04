@@ -13,7 +13,7 @@ function route() {
         $contents = $_SESSION["route.content"];
         $contents = str_replace("<?php", "", $contents);
         eval($contents);
-        if (!defined(DEBUG) || !DEBUG) {
+        if (!defined("DEBUG") || !DEBUG) {
             logging::d("route", "route from session: $subdomain.$domain");
             return;
         }

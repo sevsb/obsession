@@ -49,6 +49,10 @@ function get_session_assert($key, $message = "someone is attempting to try param
     die("");
 }
 
+function fatal($message = "invalid parameter") {
+    logging::fatal("Helper", $message);
+    die($message);
+}
 
 function jsUnescape($escstr) {
     // echo "input: ";
