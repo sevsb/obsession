@@ -9,6 +9,7 @@ function dispatch_action() {
     include_once(dirname(__FILE__) . "/logging.php");
     include_once(dirname(__FILE__) . "/helper.php");
 
+    logging::set_logging_dir(APP_PATH . "/logs/");
 
     list($path, $className, $funcName) = parse_action_string();
 
