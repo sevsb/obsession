@@ -7,6 +7,7 @@ function start() {
     // dump_var($_SERVER);
 
     route();
+    logging::set_logging_dir(APP_PATH . "/logs/");
 
     include_once(dirname(__FILE__) . "/config.php");
     include_once(dirname(__FILE__) . "/logging.php");
