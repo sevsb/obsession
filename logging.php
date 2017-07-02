@@ -34,6 +34,10 @@ class logging {
         return self::$instance;
     }
 
+    private function set_dir($dir) {
+        $this->logdir_override = $dir;
+    }
+
     private function write($level, $tag, $message, $strip = true) {
         if (PHP_SAPI != "cli") {
             if (!$this->fp) {
@@ -77,7 +81,7 @@ class logging {
     }
 
     public static function set_logging_dir($path) {
-        logging::instance()->$logdir_override = $path;
+        logging::instance()->set_dir($path);
     }
 
     public static function d($tag, $message, $strip = true) {
