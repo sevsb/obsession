@@ -9,7 +9,14 @@ class logging {
     private $logdir_override = null;
 
     private function __construct() {
+        $this->init();
+    }
+
+    private function init() {
         if (PHP_SAPI != "cli") {
+            if ($this->fp != null) {
+                fclose($this->fp);
+            }
 
             $logdir = $this->logdir_override;
             if ($logdir == null) $logdir = LOG_DIR;
@@ -36,6 +43,7 @@ class logging {
 
     private function set_dir($dir) {
         $this->logdir_override = $dir;
+        $this->init();
     }
 
     private function write($level, $tag, $message, $strip = true) {
