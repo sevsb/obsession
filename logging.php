@@ -77,7 +77,7 @@ class logging {
     }
 
     public static function set_logging_dir($path) {
-        logging::instance()->$logdir_override = path;
+        logging::instance()->$logdir_override = $path;
     }
 
     public static function d($tag, $message, $strip = true) {
