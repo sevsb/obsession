@@ -6,10 +6,14 @@ defined('LOG_DIR') or define('LOG_DIR', dirname(__FILE__) . '/../logs/');
 class logging {
     private static $instance = null;
     private $fp = null;
+    private $logdir_override = null;
 
     private function __construct() {
         if (PHP_SAPI != "cli") {
-            $logdir = LOG_DIR;
+
+            $logdir = $this->logdir_override;
+            if ($logdir == null) $logdir = LOG_DIR;
+
             $logdir .= "/" . date("Y");
 
             if (!is_dir($logdir)) {
@@ -70,6 +74,10 @@ class logging {
             flock($this->fp, LOCK_UN);
         }
         return true;
+    }
+
+    public static function set_logging_dir($path) {
+        logging::instance()->$logdir_override = path;
     }
 
     public static function d($tag, $message, $strip = true) {
