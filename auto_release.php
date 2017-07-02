@@ -1,14 +1,19 @@
 <?php
 
-include_once("logging.php");
-include_once("helper.php");
+include_once(dirname(__FILE__) . "/route.php");
+
+route();
+
+include_once(dirname(__FILE__) . "/config.php");
+include_once(dirname(__FILE__) . "/logging.php");
+include_once(dirname(__FILE__) . "/helper.php");
 
 
 function update($dir) {
     chdir($dir);
 
     $cwd = getcwd();
-    logging::d("Hook", "release to: $cwd");
+    logging::d("Hook", "update app path: $cwd");
 
     $r = "";
     $f = popen("git pull 2>&1", "r");
@@ -20,21 +25,8 @@ function update($dir) {
     logging::d("Hook", "git pull\n$r");
 }
 
-if (!isset($_REQUEST["hook"])) {
-    die("");
-}
 
-$hook = $_REQUEST["hook"];
-$hook = json_decode($hook, true);
-
-if ($hook["password"] != "aabbcc") {
-    logging::d("Hook", "invalid password.");
-    die("");
-}
-
-logging::d("Hook", "update release.");
-
-update(ROOT_PATH);
-update("/var/www/html/znpf_dev");
+update(dirname(__FILE__));
+update(APP_PATH);
 
 
