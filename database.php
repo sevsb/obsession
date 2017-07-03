@@ -30,11 +30,11 @@ class database {
         $this->pdo = null;
     }
 
-    protected function escape($text) {
+    public function escape($text) {
         return $this->pdo->quote($text);
     }
 
-    protected function unescape($text) {
+    public function unescape($text) {
         return $text;
     }
 
@@ -209,4 +209,66 @@ class database {
         return $au;
     }
 }
+
+class database_table {
+    private $table = null;
+    private $database = null;
+    private function __construct($db, $table) {
+        $this->database = new database();
+        try {
+            $this->database->init($db);
+        } catch (PDOException $e) {
+            logging::e("PDO.Exception", $e, false);
+            die($e);
+        }
+        $this->table = $table;
+    }
+
+    public function get_all($where = "", $addons = "") {
+        return $this->database->get_all_table($this->table, $where, $addons);
+    }
+
+    public function get_one($where, $addons = "") {
+        return $this->database->get_one_table($this->table, $where, $addons);
+    }
+
+    public function last_insert_id() {
+        return $this->database->last_insert_id();
+    }
+
+    public function insert($data) {
+        return $this->database->insert($this->table, $data);
+    }
+
+    public function update($data, $where = null, $escape = true) {
+        return $this->database->update($this->table, $data, $where, $escape);
+    }
+
+    public function delete($table, $where) {
+        return $this->database->delete($this->table, $where);
+    }
+
+    public function escape($text) {
+        return $this->database->escape($text);
+    }
+
+    public function unescape($text) {
+        return $this->database->unescape($text);
+    }
+
+    public function begin_transaction() {
+        $this->database->begin_transaction();
+    }
+
+    public function rollback() {
+        $this->database->rollback();
+    }
+
+    public function commit() {
+        $this->database->commit();
+    }
+
+
+};
+
 

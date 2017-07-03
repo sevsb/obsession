@@ -11,7 +11,9 @@ function start() {
     include_once(dirname(__FILE__) . "/logging.php");
     include_once(dirname(__FILE__) . "/helper.php");
 
-    logging::set_logging_dir(APP_PATH . "/logs/");
+    if (file_exists(APP_PATH)) {
+        logging::set_logging_dir(APP_PATH . "/logs/");
+    }
 
     list($path, $controller, $action) = parse_query_string();
 

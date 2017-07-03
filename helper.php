@@ -137,3 +137,7 @@ function mk_domain_url($url) {
     return $url;
 }
 
+function get_current_url() {
+    return mk_domain_url(ltrim($_SERVER["REQUEST_URI"], "/"));
+}
+
