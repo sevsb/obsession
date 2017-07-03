@@ -9,7 +9,7 @@ class database {
     private $escape_table = array();
     private $pdo = null;
 
-    private function __construct() {
+    public function __construct() {
         
     }
 
@@ -213,7 +213,7 @@ class database {
 class database_table {
     private $table = null;
     private $database = null;
-    private function __construct($db, $table) {
+    protected function database_table($db, $table) {
         $this->database = new database();
         try {
             $this->database->init($db);

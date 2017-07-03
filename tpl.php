@@ -57,6 +57,16 @@ class tpl {
             $content = str_replace($node[0], "<?php echo {$node[1]}; ?>", $content);
         }
 
+        $matches = array();
+        preg_match_all('/\{=([^\}]*)\}/', $content, $matches, PREG_SET_ORDER);
+        foreach ($matches as $node) {
+            // logging::d("Debug", "match 0 = " . $node[0]);
+            // logging::d("Debug", "match 1 = " . $node[1]);
+            $content = str_replace($node[0], "<?php echo {$node[1]}; ?>", $content);
+        }
+
+        // logging::d("Debug", $content, false);
+
         extract($this->var, EXTR_OVERWRITE);
         // include($file);
         eval("?> $content");
