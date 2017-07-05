@@ -33,6 +33,10 @@ function route() {
         return;
     }
 
+    if (isset($_REQUEST["app"])) {
+        $subdomain = $_REQUEST["app"];
+    }
+
     $file = $routepath . "$subdomain.$domain.php";
     if (file_exists($file)) {
         logging::d("route", "route to $subdomain.$domain");
@@ -49,6 +53,8 @@ function route() {
     }
 
     logging::d("route", "route nothing: $domain");
+    include_once(dirname(__FILE__) . "/notfound.php");
+    die("");
 }
 
 function parse_query_string() {
