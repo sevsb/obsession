@@ -58,17 +58,20 @@ function route() {
 }
 
 function parse_query_string() {
-    $qs = $_SERVER["QUERY_STRING"];
-    if (empty($qs)) {
-        $qs = "index/index";
+    $qr = array();
+    if (isset($_REQUEST["action"])) {
+        $s = $_REQUEST["action"];
+        $qr = explode(".", $s);
+    } else {
+        $qs = $_SERVER["QUERY_STRING"];
+        if (empty($qs)) {
+            $qs = "index/index";
+        }
+        $qsr = explode("&", $qs);
+        $qs = $qsr[0];
+        $qs = trim($qs, " /");
+        $qr = explode("/", $qs);
     }
-
-    $qsr = explode("&", $qs);
-    $qs = $qsr[0];
-
-    $qs = trim($qs, " /");
-
-    $qr = explode("/", $qs);
 
     $length = count($qr);
     if ($length < 3) {

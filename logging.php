@@ -2,18 +2,21 @@
 // include_once(dirname(__FILE__) . "/config.php");
 
 defined('LOG_DIR') or define('LOG_DIR', dirname(__FILE__) . '/../logs/');
+defined('LOG_FILE_PREFIX') or define('LOG_FILE_PREFIX', "logging-");
 
 class logging {
     private static $instance = null;
     private $fp = null;
     private $logdir_override = null;
+    private $logfileprefix = LOG_FILE_PREFIX;
+    private $inited = false;
 
     private function __construct() {
-        $this->init();
+        $inited = false;
     }
 
     private function init() {
-        if (PHP_SAPI != "cli") {
+        // if (PHP_SAPI != "cli") {
             if ($this->fp != null) {
                 fclose($this->fp);
             }
@@ -25,13 +28,14 @@ class logging {
 
             if (!is_dir($logdir)) {
                 mkdir($logdir, 0777, true);
+                chmod($logdir, 0777);
             }
-            $path = $logdir . "/logging-" . date("Y-m-d") . ".log";
+            $path = $logdir . "/" . $this->logfileprefix . date("Y-m-d") . ".log";
             if (!file_exists($path)) {
                 touch($path);
             }
             $this->fp = fopen($path, "a");
-        }
+        // }
     }
 
     private static function instance() {
@@ -47,6 +51,10 @@ class logging {
     }
 
     private function write($level, $tag, $message, $strip = true) {
+        if (!$this->inited) {
+            $this->init();
+        }
+
         if (PHP_SAPI != "cli") {
             if (!$this->fp) {
                 return false;
@@ -80,16 +88,22 @@ class logging {
 
         if (PHP_SAPI == "cli") {
             printf("%s", $logs);
-        } else {
-            flock($this->fp, LOCK_EX);
-            fwrite($this->fp, $logs);
-            flock($this->fp, LOCK_UN);
+            if (!$this->fp) {
+                return true;
+            }
         }
+        flock($this->fp, LOCK_EX);
+        fwrite($this->fp, $logs);
+        flock($this->fp, LOCK_UN);
         return true;
     }
 
     public static function set_logging_dir($path) {
         logging::instance()->set_dir($path);
+    }
+
+    public static function set_file_prefix($prefix) {
+        logging::instance()->logfileprefix = $prefix;
     }
 
     public static function d($tag, $message, $strip = true) {
@@ -112,7 +126,7 @@ class logging {
         logging::instance()->write("V", $tag, $message, $strip);
     }
 
-    public static function fatal($tag, $message, $strip = true) {
+    public static function fatal($tag = "FATAL", $message = "", $strip = true) {
         logging::instance()->write("F", $tag, $message, $strip);
 
         $array = debug_backtrace();
