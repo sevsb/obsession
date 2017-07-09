@@ -26,6 +26,24 @@ class database {
         // }
     }
 
+    public function ping() {
+        try{
+            $this->pdo->getAttribute(PDO::ATTR_SERVER_INFO);
+        } catch (PDOException $e) {
+            if (strpos($e->getMessage(), 'MySQL server has gone away') !== false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function reconnect($dbname) {
+        if (!$this->ping()) {
+            $this->close();
+            $this->init($dbname);
+        }
+    }
+
     public function close() {
         $this->pdo = null;
     }
@@ -213,7 +231,9 @@ class database {
 class database_table {
     private $table = null;
     private $database = null;
+    private $dbname = null;
     protected function database_table($db, $table) {
+        $this->dbname = $db;
         $this->database = new database();
         try {
             $this->database->init($db);
@@ -225,26 +245,32 @@ class database_table {
     }
 
     public function get_all($where = "", $addons = "") {
+        $this->database->reconnect($this->dbname);
         return $this->database->get_all_table($this->table, $where, $addons);
     }
 
     public function get_one($where, $addons = "") {
+        $this->database->reconnect($this->dbname);
         return $this->database->get_one_table($this->table, $where, $addons);
     }
 
     public function last_insert_id() {
+        $this->database->reconnect($this->dbname);
         return $this->database->last_insert_id();
     }
 
     public function insert($data) {
+        $this->database->reconnect($this->dbname);
         return $this->database->insert($this->table, $data);
     }
 
     public function update($data, $where = null, $escape = true) {
+        $this->database->reconnect($this->dbname);
         return $this->database->update($this->table, $data, $where, $escape);
     }
 
     public function delete($table, $where) {
+        $this->database->reconnect($this->dbname);
         return $this->database->delete($this->table, $where);
     }
 
@@ -257,14 +283,17 @@ class database_table {
     }
 
     public function begin_transaction() {
+        $this->database->reconnect($this->dbname);
         $this->database->begin_transaction();
     }
 
     public function rollback() {
+        $this->database->reconnect($this->dbname);
         $this->database->rollback();
     }
 
     public function commit() {
+        $this->database->reconnect($this->dbname);
         $this->database->commit();
     }
 
