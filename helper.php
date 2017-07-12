@@ -87,9 +87,8 @@ function jsUnescape($escstr) {
 
 function go($path) {
     $app = get_request("app");
-    $path = str_replace("/", ".", $path);
     // $home = rtrim(HOME_URL, " /");
-    $url = "?action=$path";
+    $url = "?$path";
     if ($app != null) {
         $url .= "&app=$app";
     }
