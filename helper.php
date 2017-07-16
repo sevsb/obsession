@@ -86,7 +86,7 @@ function jsUnescape($escstr) {
 }
 
 function go($path) {
-    $app = get_request("app");
+    $app = get_request("jumpsubdomain");
     if ($app != null) {
         $d = new domain();
         $domain = $d->domain();
