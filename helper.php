@@ -87,10 +87,13 @@ function jsUnescape($escstr) {
 
 function go($path) {
     $app = get_request("app");
-    // $home = rtrim(HOME_URL, " /");
-    $url = "?$path";
     if ($app != null) {
-        $url .= "&app=$app";
+        $d = new domain();
+        $domain = $d->domain();
+        $subdomain = $d->subdomain();
+        $url = "//$app.$domain/?$path";
+    } else {
+        $url = "?$path";
     }
     Header("Location: $url");
     die("");

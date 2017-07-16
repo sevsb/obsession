@@ -35,6 +35,7 @@ class logging {
                 touch($path);
             }
             $this->fp = fopen($path, "a");
+            chmod($path, 0777);
         // }
     }
 
