@@ -40,6 +40,7 @@ function route() {
 
     if (isset($_REQUEST["app"])) {
         $subdomain = $_REQUEST["app"];
+        $_SESSION["route.subdomain"] = $subdomain;
     }
 
     $file = $routepath . "$subdomain.$domain.php";
