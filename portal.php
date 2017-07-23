@@ -49,7 +49,14 @@ function start() {
         try {
             $postaction = $class->getMethod("postaction");
             if ($postaction->isPublic() && !$postaction->isStatic()) {
-                $postaction->invoke($thiz, $action);
+                $ret = $postaction->invoke($thiz, $action);
+                if (!empty($ret)) {
+                    if (is_array($ret)) {
+                        echo json_encode($ret);
+                    } else if (is_string($ret)) {
+                        echo $ret;
+                    }
+                }
             }
         } catch (ReflectionException $e) {
         }
