@@ -269,7 +269,7 @@ class database_table {
         return $this->database->update($this->table, $data, $where, $escape);
     }
 
-    public function delete($table, $where) {
+    public function delete($where) {
         $this->database->reconnect($this->dbname);
         return $this->database->delete($this->table, $where);
     }
