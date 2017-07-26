@@ -83,12 +83,12 @@ class database {
     }
 
     private function query($query) {
-        if (strlen($query) > 100) {
-            $more = strlen($query) - 100;
-            logging::d("Database", substr($query, 0, 100) . "...($more bytes available)");
-        } else {
+        // if (strlen($query) > 100) {
+        //     $more = strlen($query) - 100;
+        //     logging::d("Database", substr($query, 0, 100) . "...($more bytes available)");
+        // } else {
             logging::d("Database", $query);
-        }
+        // }
         $res = $this->pdo->query($query);
         if ($res === false) {
             logging::d("Database", "FAIL query: " . dump_var($this->pdo->errorInfo(), true));
