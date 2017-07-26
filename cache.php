@@ -1,5 +1,6 @@
 <?php
 include_once(dirname(__FILE__) . "/config.php");
+include_once(dirname(__FILE__) . "/helper.php");
 
 class cache_items {
     public function __construct($value, $timeout) {
@@ -32,43 +33,56 @@ class cache {
         return self::$instance;
     }
 
+    public static function session() {
+        $instance = get_session("cache.session-cache", null);
+        if ($instance == null) {
+            $instance = new cache();
+            $_SESSION["cache.session-cache"] = $instance;
+        }
+        return $instance;
+    }
 
     private $storage = array();
 
     private function __construct() {
     }
 
-    function save($key, $value, $timeout = -1) {
+    public function save($key, $value, $timeout = -1) {
         $it = new cache_items($value, $timeout);
         $this->storage[$key] = $it;
     }
 
-    function has($key) {
+    public function has($key) {
         return isset($this->storage[$key]);
     }
 
-    function valid($key) {
+    public function valid($key) {
         if (!$this->has($key))
             return false;
         $it = $this->storage[$key];
         return $it->isValid();
     }
 
-    function load($key, $default = null) {
+    public function load($key, $default = null) {
         if (!$this->valid($key))
             return $default;
         return $this->storage[$key]->value;
     }
 
-    function drop($key) {
+    public function drop($key) {
         if (isset($this->storage[$key])) {
             unset($this->storage[$key]);
         }
+    }
+
+    public function clear() {
+        $this->storage = array();
     }
 };
 
 
 // $c = cache::instance();
+// $c = cache::session();
 // $c->save("a", "xcvxvcxv");
 // $r = $c->has("a");
 // var_dump($r);
