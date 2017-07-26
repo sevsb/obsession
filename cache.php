@@ -83,7 +83,10 @@ class cache {
 
 // $c = cache::instance();
 // $c = cache::session();
+// print_r($_SESSION);
 // $c->save("a", "xcvxvcxv");
+// $c = cache::session();
+// $c->save("b", "xxxxxxxxxxx");
 // $r = $c->has("a");
 // var_dump($r);
 // $r = $c->valid("a");
@@ -92,7 +95,7 @@ class cache {
 // var_dump($r);
 // $r = $c->load("b");
 // var_dump($r);
-
+// print_r($_SESSION);
 
 
 

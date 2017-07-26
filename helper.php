@@ -29,7 +29,7 @@ function get_request($key, $default = null) {
     return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $default;
 }
 
-function get_session($key, $default = null) {
+function &get_session($key, $default = null) {
     return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
 }
 
