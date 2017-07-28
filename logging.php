@@ -127,6 +127,17 @@ class logging {
         logging::instance()->write("V", $tag, $message, $strip);
     }
 
+    public static function printStackTrace() {
+        $array = debug_backtrace();
+        foreach ($array as $key => $row) {
+            if (!empty($row["class"])) {
+                logging::instance()->write("E", "FATAL", "\t\t" . $row["class"] . "->" . $row["function"], false);
+            } else {
+                logging::instance()->write("E", "FATAL", "\t\t" . basename($row["file"]) . ":" . $row["function"] . ":" . $row["line"], false);
+            }
+        }
+    }
+
     public static function fatal($tag = "FATAL", $message = "", $strip = true) {
         logging::instance()->write("F", $tag, $message, $strip);
 
