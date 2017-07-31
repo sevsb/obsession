@@ -30,7 +30,8 @@ function get_request($key, $default = null) {
 }
 
 function &get_session($key, $default = null) {
-    return isset($_SESSION[$key]) ? $_SESSION[$key] : $default;
+    $def = $default;
+    return isset($_SESSION[$key]) ? $_SESSION[$key] : $def;
 }
 
 function get_request_assert($key, $message = "someone is attempting to try parameter.") {
