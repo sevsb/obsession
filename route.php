@@ -56,6 +56,11 @@ function route() {
         include($file);
         $_SESSION["route.content"] = file_get_contents($file);
         return;
+    } else if (file_exists("$routepath/default.php")) {
+        logging::d("route", "route to default");
+        include($file);
+        $_SESSION["route.content"] = file_get_contents("$routepath/default.php");
+        return;
     }
 
     logging::d("route", "route nothing: $domain");
