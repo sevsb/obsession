@@ -78,6 +78,7 @@ class logging {
         $tag = sprintf("%-8s", $tag);
 
         $logs = "<" . date("Y-m-d H:i:s") . ":$ms> ";
+        $logs .= "    " . getmypid();
         // $logs .= isset($_SESSION['username']) ? "user:{$_SESSION['username']}" : "user:not login";
         $logs .= "    [";
         $logs .= isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'shell';

@@ -58,7 +58,7 @@ function route() {
         return;
     } else if (file_exists("$routepath/default.php")) {
         logging::d("route", "route to default");
-        include($file);
+        include("$routepath/default.php");
         $_SESSION["route.content"] = file_get_contents("$routepath/default.php");
         return;
     }

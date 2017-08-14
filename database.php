@@ -30,15 +30,17 @@ class database {
         try{
             $this->pdo->getAttribute(PDO::ATTR_SERVER_INFO);
         } catch (PDOException $e) {
-            if (strpos($e->getMessage(), 'MySQL server has gone away') !== false) {
-                return false;
-            }
+            return false;
+            // if (strpos($e->getMessage(), 'MySQL server has gone away') !== false) {
+            //     return false;
+            // }
         }
         return true;
     }
 
     public function reconnect($dbname) {
         if (!$this->ping()) {
+            logging::d("Database", "reconnect to database.");
             $this->close();
             $this->init($dbname);
         }
