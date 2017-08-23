@@ -188,11 +188,11 @@ class tpl {
             // debug output.
             $info1 = empty($this->var) ? json_encode(array()) : json_encode($this->var);
             $info2 = empty($this->replace_var) ? json_encode(array()) : json_encode($this->replace_var);
-            echo '<script type="text/javascript">var PARSE_VAR = ' . $info1 . '; console.debug(PARSE_VAR);</script>' . "\n";
-            echo '<script type="text/javascript">var REPLACE_VAR = ' . $info2 . '; console.debug(REPLACE_VAR);</script>' . "\n";
-            echo '<script type="text/javascript">var SERVERS = ' . json_encode($_SERVER) . '; console.debug(SERVERS);</script>' . "\n";
-            echo '<script type="text/javascript">var REQUESTS = ' . json_encode($_REQUEST) . '; console.debug(REQUESTS);</script>' . "\n";
-            echo '<script type="text/javascript">var SESSIONS = ' . json_encode($_SESSION) . '; console.debug(SESSIONS);</script>' . "\n";
+            echo '<script type="text/javascript">var PARSE_VAR = ' . $info1 . '; console.debug("persevar:"); console.debug(PARSE_VAR);</script>' . "\n";
+            echo '<script type="text/javascript">var REPLACE_VAR = ' . $info2 . '; console.debug("replacevar:"); console.debug(REPLACE_VAR);</script>' . "\n";
+            echo '<script type="text/javascript">var SERVERS = ' . json_encode($_SERVER) . '; console.debug("SERVERS:"); console.debug(SERVERS);</script>' . "\n";
+            echo '<script type="text/javascript">var REQUESTS = ' . json_encode($_REQUEST) . '; console.debug("REQUESTS:"); console.debug(REQUESTS);</script>' . "\n";
+            echo '<script type="text/javascript">var SESSIONS = ' . json_encode($_SESSION) . '; console.debug("SESSIONS:"); console.debug(SESSIONS);</script>' . "\n";
         }
     }
 

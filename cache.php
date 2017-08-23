@@ -83,9 +83,11 @@ class cache {
 
 // $c = cache::instance();
 // $c = cache::session();
+// print_r($c);
 // print_r($_SESSION);
 // $c->save("a", "xcvxvcxv");
 // $c = cache::session();
+// print_r($c);
 // $c->save("b", "xxxxxxxxxxx");
 // $r = $c->has("a");
 // var_dump($r);
