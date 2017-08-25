@@ -36,6 +36,8 @@ defined('DEBUG') or define('DEBUG', false);
 
 defined('PARSE_SCRIPT') or define('PARSE_SCRIPT', false);
 
+defined('ORGNIZAION_NAME') or define('ORGNIZATION_NAME', "");
+
 if (!isset($_SESSION)) {
     session_start();
 }

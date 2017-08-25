@@ -250,6 +250,7 @@ class tpl {
         $content = str_replace("[:instance]", rtrim(INSTANCE_URL, "/"), $content);
         $content = str_replace("[:app]", rtrim(APP_URL, "/"), $content);
         $content = str_replace("[:vendor]", rtrim(VENDOR_URL, "/"), $content);
+        $content = str_replace("[:orgnization]", ORGNIZATION_NAME, $content);
         return $content;
     }
 };
