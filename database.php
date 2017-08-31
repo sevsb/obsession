@@ -234,7 +234,7 @@ class database_table {
     private $table = null;
     private $database = null;
     private $dbname = null;
-    protected function database_table($db, $table) {
+    protected function __construct($db, $table) {
         $this->dbname = $db;
         $this->database = new database();
         try {
