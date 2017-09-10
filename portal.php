@@ -20,7 +20,9 @@ function start() {
     $pth = APP_PATH . '/' . $path . "/$controller/$action.php";
     if (file_exists($pth)) {
         logging::d("Portal", "access page: " . APP_NAME . "/$path/$controller/$action.php");
-        include_once($pth);
+        include_once(dirname(__FILE__) . "/tpl.php");
+        $tpl = new tpl();
+        $tpl->display_file($pth);
         return;
     }
 

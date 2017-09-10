@@ -72,6 +72,21 @@ class tpl {
         eval("?> $content");
     }
 
+    public function display_file($filename) {
+        ob_start();
+        ob_implicit_flush(false);
+        $this->render($filename);
+        $c = ob_get_clean();
+        $c = $this->replace($c);
+
+        echo $c;
+        if (DEBUG) {
+            echo '<script type="text/javascript">var SERVERS = ' . json_encode($_SERVER) . '; console.debug("SERVERS:"); console.debug(SERVERS);</script>' . "\n";
+            echo '<script type="text/javascript">var REQUESTS = ' . json_encode($_REQUEST) . '; console.debug("REQUESTS:"); console.debug(REQUESTS);</script>' . "\n";
+            echo '<script type="text/javascript">var SESSIONS = ' . json_encode($_SESSION) . '; console.debug("SESSIONS:"); console.debug(SESSIONS);</script>' . "\n";
+        }
+    }
+
     public function display($tplname, $mem = false) {
         list($file, $fileurl) = $this->parse($tplname);
         if (empty($file))
