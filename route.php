@@ -90,12 +90,12 @@ function parse_query_string() {
             $qr[1] = "index";
         }
 
-        $controller = $qr[0] . "_controller";
-        $action = $qr[1] . "_action";
+        $controller = $qr[0]; // . "_controller";
+        $action = $qr[1]; // . "_action";
         $path = "";
     } else {
-        $controller = $qr[$length - 2] . "_controller";
-        $action = $qr[$length - 1] . "_action";
+        $controller = $qr[$length - 2]; // . "_controller";
+        $action = $qr[$length - 1]; // . "_action";
         unset($qr[$length - 1]);
         unset($qr[$length - 2]);
         $path = implode("/", $qr);
@@ -117,8 +117,8 @@ function parse_action_string() {
         die("invalid action.");
     }
 
-    $className = $arr[$length - 2] . "_controller";
-    $funcName = $arr[$length - 1] . "_ajax";
+    $className = $arr[$length - 2]; //  . "_controller";
+    $funcName = $arr[$length - 1]; //  . "_ajax";
     unset($arr[$length - 1]);
     unset($arr[$length - 2]);
     $path = implode("/", $arr);

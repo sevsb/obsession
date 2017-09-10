@@ -15,6 +15,18 @@ function dispatch_action() {
 
     list($path, $className, $funcName) = parse_action_string();
 
+
+    $pth = APP_PATH . '/' . $path . "/$className/$funcName.php";
+    if (file_exists($pth)) {
+        logging::d("Portal", "access page: " . APP_NAME . "/$path/$className/$funcName.php");
+        include_once($pth);
+        return;
+    }
+
+    $className = $className . "_controller";
+    $funcName = $funcName . "_ajax";
+
+
     $pth = CONTROLLER_PATH . "/" . $path . "/$className.php";
     logging::d("Action", "access: " . APP_NAME . ":$path::$className::$funcName");
 

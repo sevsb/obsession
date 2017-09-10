@@ -17,6 +17,16 @@ function start() {
 
     list($path, $controller, $action) = parse_query_string();
 
+    $pth = APP_PATH . '/' . $path . "/$controller/$action.php";
+    if (file_exists($pth)) {
+        logging::d("Portal", "access page: " . APP_NAME . "/$path/$controller/$action.php");
+        include_once($pth);
+        return;
+    }
+
+    $controller = $controller . "_controller";
+    $action = $action . "_action";
+
     $pth = CONTROLLER_PATH . "/" . $path . "/$controller.php";
 
     logging::d("Portal", "access: " . APP_NAME . ":$path::$controller::$action");
