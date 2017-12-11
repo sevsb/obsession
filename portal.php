@@ -21,9 +21,9 @@ function start() {
     if ($defaultindex) {
         $pth = APP_PATH . '/' . "$action.php";
     }
-    logging::d("Portal", "controller: " . $controller);
-    logging::d("Portal", "defaultindex: " . $defaultindex);
-    logging::d("Portal", "test file: " . $pth);
+    // logging::d("Portal", "controller: " . $controller);
+    // logging::d("Portal", "defaultindex: " . $defaultindex);
+    // logging::d("Portal", "test file: " . $pth);
     if (file_exists($pth)) {
         logging::d("Portal", "access page: " . APP_NAME . "/$path/$controller/$action.php");
         include_once(dirname(__FILE__) . "/tpl.php");
