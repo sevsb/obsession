@@ -69,6 +69,7 @@ function route() {
 }
 
 function parse_query_string() {
+    $defaultindex = false;
     $qr = array();
     if (isset($_REQUEST["action"])) {
         $s = $_REQUEST["action"];
@@ -77,6 +78,7 @@ function parse_query_string() {
         $qs = $_SERVER["QUERY_STRING"];
         if (empty($qs)) {
             $qs = "index/index";
+            $defaultindex = true;
         }
         $qsr = explode("&", $qs);
         $qs = $qsr[0];
@@ -87,6 +89,7 @@ function parse_query_string() {
     $length = count($qr);
     if ($length < 3) {
         if (count($qr) == 1) {
+            $defaultindex = true;
             $qr[1] = "index";
         }
 
@@ -101,7 +104,7 @@ function parse_query_string() {
         $path = implode("/", $qr);
     }
 
-    return array(0 => $path, 1 => $controller, 2 => $action);
+    return array(0 => $path, 1 => $controller, 2 => $action, 3 => $defaultindex);
 }
 
 function parse_action_string() {
