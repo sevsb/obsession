@@ -107,6 +107,11 @@ class database {
         return $this->pdo->lastInsertId();
     }
 
+    public function alter($table, $sql) {
+        $s = "ALTER TABLE `{$table}` {$sql}";
+        return $this->query($s);
+    }
+
     public function insert($table, $data) {
         if (!is_array($data)) {
             return false;
@@ -149,6 +154,15 @@ class database {
             return false;
         }
         $sql = "DELETE FROM {$table} WHERE {$where}";
+        $ids = $this->query($sql);
+        return ($ids !== false);
+    }
+
+    public function truncate($table) {
+        if (empty($table)) {
+            return false;
+        }
+        $sql = "TRUNCATE TABLE {$table}";
         $ids = $this->query($sql);
         return ($ids !== false);
     }
@@ -231,9 +245,15 @@ class database {
 }
 
 class database_table {
+    const OPTION_RECONNECT = "reconnect";
+
     private $table = null;
     private $database = null;
     private $dbname = null;
+    private $option = array(
+        self::OPTION_RECONNECT => false,
+    );
+
     protected function __construct($db, $table) {
         $this->dbname = $db;
         $this->database = new database();
@@ -246,33 +266,46 @@ class database_table {
         $this->table = $table;
     }
 
+    public function set_option($key, $value) {
+        $this->option[$key] = $value;
+    }
+    public function get_option($key) {
+        return $this->option[$key];
+    }
+
+    private function reconnect() {
+        if ($this->get_option(self::OPTION_RECONNECT)) {
+            $this->database->reconnect($this->dbname);
+        }
+    }
+
     public function get_all($where = "", $addons = "") {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         return $this->database->get_all_table($this->table, $where, $addons);
     }
 
     public function get_one($where, $addons = "") {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         return $this->database->get_one_table($this->table, $where, $addons);
     }
 
     public function last_insert_id() {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         return $this->database->last_insert_id();
     }
 
     public function insert($data) {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         return $this->database->insert($this->table, $data);
     }
 
     public function update($data, $where = null, $escape = true) {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         return $this->database->update($this->table, $data, $where, $escape);
     }
 
     public function delete($where) {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         return $this->database->delete($this->table, $where);
     }
 
@@ -285,20 +318,33 @@ class database_table {
     }
 
     public function begin_transaction() {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         $this->database->begin_transaction();
     }
 
     public function rollback() {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         $this->database->rollback();
     }
 
     public function commit() {
-        $this->database->reconnect($this->dbname);
+        $this->reconnect();
         $this->database->commit();
     }
 
+    public function alter($sql) {
+        $this->reconnect();
+        $this->database->alter($this->table, $sql);
+    }
+
+    public function reset_for_upgrade() {
+        if (PHP_SAPI != "cli") {
+            return false;
+        }
+        $ret1 = $this->delete("id <> 0");
+        $ret2 = $this->alter("AUTO_INCREMENT = 1");
+        return $ret1 && $ret2;
+    }
 
 };
 

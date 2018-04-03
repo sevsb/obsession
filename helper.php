@@ -6,6 +6,21 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+class ScopedTrace {
+    private $start;
+    private $name;
+    public function __construct($name) {
+        $this->start = gettimeofday(true);
+        $this->name = $name;
+    }
+
+    public function __destruct() {
+        $now = gettimeofday(true);
+        $diff = $now - $this->start;
+        logging::d("ScopedTrace", "{$this->name} costs $diff seconds.");
+    }
+};
+
 function dump_var($var, $die = null) {
     if ($die === true) {
         $v = print_r($var, true);
