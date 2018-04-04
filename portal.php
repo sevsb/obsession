@@ -25,6 +25,7 @@ function start() {
     // logging::d("Portal", "defaultindex: " . $defaultindex);
     // logging::d("Portal", "test file: " . $pth);
     if (file_exists($pth)) {
+        $st = new ScopedTrace("action.invoke.file: $path/$controller/$action.php");
         logging::d("Portal", "access page: " . APP_NAME . "/$path/$controller/$action.php");
         include_once(dirname(__FILE__) . "/tpl.php");
         $tpl = new tpl();
@@ -47,7 +48,7 @@ function start() {
     include_once($pth);
 
     try {
-        $st = new ScopedTrace("action.invoke");
+        $st = new ScopedTrace("action.invoke: $controller:$action");
         $class = new ReflectionClass($controller);
         $thiz = $class->newInstance();
 
