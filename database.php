@@ -58,7 +58,7 @@ class database {
         return $text;
     }
 
-    private function do_escape($table, $data) {
+    protected function do_escape($table, $data) {
         if ($this->escape_table != null) {
             if (isset($this->escape_table[$table])) {
                 foreach ($data as $k => $v) {
@@ -77,14 +77,14 @@ class database {
         return $data;
     }
 
-    private function do_unescape($arr) {
+    protected function do_unescape($arr) {
         foreach ($arr as $k => $v) {
             $arr[$k] = $this->unescape($v);
         }
         return $arr;
     }
 
-    private function query($query) {
+    protected function query($query) {
         // if (strlen($query) > 100) {
         //     $more = strlen($query) - 100;
         //     logging::d("Database", substr($query, 0, 100) . "...($more bytes available)");
@@ -264,6 +264,10 @@ class database_table {
             die($e);
         }
         $this->table = $table;
+    }
+
+    public function table_name() {
+        return $this->table;
     }
 
     public function set_option($key, $value) {

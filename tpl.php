@@ -199,7 +199,7 @@ class tpl {
         echo $c;
         // echo $footer;
 
-        if (DEBUG) {
+        if (false && DEBUG) {
             // debug output.
             $info1 = empty($this->var) ? json_encode(array()) : json_encode($this->var);
             $info2 = empty($this->replace_var) ? json_encode(array()) : json_encode($this->replace_var);
