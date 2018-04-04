@@ -47,6 +47,7 @@ function start() {
     include_once($pth);
 
     try {
+        $st = new ScopedTrace("action.invoke");
         $class = new ReflectionClass($controller);
         $thiz = $class->newInstance();
 

@@ -346,6 +346,9 @@ class database_table {
         return $ret1 && $ret2;
     }
 
+    public function count($where = '') {
+        return $this->database->get_count($this->table, $where);
+    }
 };
 
 
