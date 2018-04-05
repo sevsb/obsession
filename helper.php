@@ -183,7 +183,7 @@ function __array_column($array, $column_key, $index_key = null) {
     if (version_compare(PHP_VERSION,'5.5.0', '>=')) {
         return array_column($array, $column_key, $index_key);
     }  
-    $result = [];
+    $result = array();
     foreach($array as $arr) {
         if(!is_array($arr)) continue;
 
