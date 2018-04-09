@@ -213,11 +213,11 @@ class database {
         return array_shift($res);
     }
 
-    public function get_count($table, $where = '') {
+    public function get_count($table, $where = '', $addons = '') {
         if (!empty($where)) {
             $where = "WHERE $where";
         }
-        $query = "SELECT COUNT(*) as count FROM {$table} " . $where;
+        $query = "SELECT COUNT(*) as count FROM {$table} $where $addons";
         $result = $this->get_one($query);
         return $result['count'];
     }
@@ -350,8 +350,8 @@ class database_table {
         return $ret1 && $ret2;
     }
 
-    public function count($where = '') {
-        return $this->database->get_count($this->table, $where);
+    public function count($where = '', $addons = '') {
+        return $this->database->get_count($this->table, $where, $addons);
     }
 };
 
